@@ -1,0 +1,14 @@
+{
+  "name": "small",
+  "version": "1.0.0",
+  "description": "",
+  "main": "small.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aaron Bruckner",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.6.1"
+  }
+}

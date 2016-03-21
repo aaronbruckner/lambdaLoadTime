@@ -1,0 +1,14 @@
+{
+  "name": "lambdaloadtime",
+  "version": "0.0.1",
+  "description": "Project that tests how lambda functions of different size initialize.",
+  "main": "lambdaLoadTime.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aaron Bruckner",
+  "license": "ISC",
+  "devDependencies": {
+    "aws-sdk": "^2.2.45"
+  }
+}
