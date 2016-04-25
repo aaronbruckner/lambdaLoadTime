@@ -14,17 +14,18 @@
 // Instructs AWS to use my personal profile already configured using the aws-cli.
 // Update to use your profile or remove to use default.
 process.env.AWS_PROFILE = 'aaron';
-
 var AWS =  require('aws-sdk');
 var lambda = new AWS.Lambda({region: 'us-west-2'});
 
 // Configuration - script expects code to be located in the bucket under 'functions/<functionType>.zip'
+// For example aaronbruckner/function/medium.zip
 var s3Bucket = 'aaronbruckner'; // Bucket that holds the test code zips
 var lambdaRoleARN = 'arn:aws:iam::249332120762:role/lambda_basic_execution'; // IAM role to run lambda function with
 
 /**
  * Takes an array of function types to test. Each function type builds a new lambda function. This function is executed
- * once and rebuild again to test how long it takes AWS to load a new function.
+ * once and rebuild again to test how long it takes AWS to load a new function. Functions are tested synchronously to
+ *
  *
  * @param {string[]} functionTypes - array of functions to test (micro||small||medium||large||extraLarge||huge||insane).
  * @param {number} intervalLimit - the total number of runs to execute against each function.
@@ -59,7 +60,9 @@ function testLambdaInit(functionTypes, intervalLimit){
     }
   }
 
-  // Outputs statistics for the current function under test.
+  /**
+   * Outputs statistics for the current function under test.
+   */
   function generateStatistics(){
     var averageRequestLength = 0;
 
@@ -93,9 +96,10 @@ function testLambdaInit(functionTypes, intervalLimit){
  * @param {function} done - function to invoke when invocation is complete and function is cleaned up.
  */
 function invokeLambdaFunction(functionType, done){
-  createLambdaFunction(functionType, function(error, data){
+  createLambdaFunction(functionType, function(error){
     if(error){
       console.log('Error invoking function: ' + functionType);
+      process.exit(1);
     }
 
     invoke();
@@ -113,9 +117,10 @@ function invokeLambdaFunction(functionType, done){
       LogType: 'Tail'
     };
 
-    lambda.invoke(params, function(error, data){
+    lambda.invoke(params, function(error){
       if (error) {
         console.log('Error invoking function: ' + functionType);
+        process.exit(1);
       }
 
       // Calculate length of request
@@ -123,9 +128,10 @@ function invokeLambdaFunction(functionType, done){
       stats.totalTime = stats.finishTime - stats.startTime;
 
 
-      deleteLambdaFunction(functionType, function(error, data){
+      deleteLambdaFunction(functionType, function(error){
         if(error){
           console.log('Error deleting function: ' + functionType);
+          process.exit(1);
         }
 
         done(stats);
