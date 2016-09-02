@@ -3,7 +3,7 @@
 This is a simple node project used to test initialization time of AWS Lambda functions. This project helped me determine
 how large a function could be before significantly impacting performance. Large initialization times will lead to
 poor user experiences as random requests take longer to complete. Results from my personal testing can be found at 
-http://aaronbruckner.com/articles/article_awsLambda.html. 
+http://aaronbruckner.com/article_awsLambda.html. 
 
 #To Run
 
